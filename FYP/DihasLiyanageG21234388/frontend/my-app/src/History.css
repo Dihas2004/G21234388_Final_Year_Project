@@ -1,0 +1,294 @@
+.history-page-container {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 2px solid #4aa398;
+  padding: 0 70px;
+  height: 80px;
+}
+
+.navbar-title h1 {
+  margin: 0;
+  color: #4aa398;
+  font-size: 1.8rem;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-links a {
+  margin-right: 30px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.logout-btn {
+  background-color: #4aa398;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.navbar-links a:hover {
+  color: #4aa398;
+  opacity: 0.8;
+}
+
+.logout-btn:hover {
+  opacity: 0.8; /* Keep text white */
+}
+
+/* Main content area */
+.history-section {
+  width: 90%;
+  margin: 40px auto;
+  background-color: #c7dfdb; /* Light teal background */
+  border: 2px solid #4aa398;
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.history-section h2 {
+  text-align: center;
+  color: #4aa398;
+  margin-top: 0;
+}
+
+.no-records {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Each training block */
+.training-block {
+  margin-bottom: 40px;
+}
+
+.training-title {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  text-decoration: underline;
+}
+
+/* info-section is reused for SHAP & PDP sections */
+.info-section {
+  margin-top: 20px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.info-section h4 {
+  color: #4aa398;
+  margin-top: 0;
+}
+
+.feature-section {
+  margin-bottom: 40px;
+}
+
+.feature-title {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #333;
+  text-decoration: underline;
+}
+
+.plot-box {
+  width: 360px; /* slightly bigger than Plot layout width */
+  border: 2px solid #000;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  margin-right: 20px;
+  box-sizing: border-box;
+}
+
+/* -----------------------------
+   GLOBAL PLOT & INTERPRETATION
+   ----------------------------- */
+.global-plot-container {
+  width: 860px; /* Slightly bigger than the 800px Plot layout */
+  border: 2px solid #000;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 20px auto; /* Center horizontally with some vertical spacing */
+}
+
+/* Stack the Plot and the interpretation box vertically and center them */
+.global-plot-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.global-interpretation-box {
+  width: 100%;
+  background-color: #e8f6f4;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Divider between trainings */
+.training-block hr {
+  margin-top: 30px;
+  border: none;
+  border-top: 2px dashed #666;
+}
+
+/* -----------------------------
+   TOGGLE BUTTONS (Local/Global)
+   ----------------------------- */
+.toggle-container {
+  display: flex;
+  justify-content: center;  /* Center horizontally */
+  align-items: center;
+  gap: 20px;                /* Spacing between the two buttons */
+  margin-bottom: 20px;      /* Some spacing below the buttons */
+}
+
+.toggle-container button {
+  background-color: #4aa398; /* Same as Logout button */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-container button:hover {
+  opacity: 0.8;
+}
+
+/* Highlight the active mode (Local/Global) */
+.toggle-container button.active {
+  background-color: #367c68;
+}
+
+/* Container for the "Training #1, Training #2, etc." links */
+.training-links-container {
+  /* NEW/UPDATED STYLES */
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem auto;
+  
+  /* This wraps all the links in a rectangle */
+  background-color: #fff;
+  border: 2px solid #4aa398;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  width: fit-content;
+}
+
+/* The actual training links themselves */
+.training-link {
+  text-decoration: none;
+  color: #000000;
+  font-weight: bold;
+
+  /* NEW/UPDATED STYLES */
+  border: 1px solid #4aa398;
+  border-radius: 4px;
+  background-color: #c7dfdb;
+  padding: 0.4rem 0.8rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.training-link:hover {
+  background-color: #4aa398;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* .section-header for SHAP & PDP titles + dropdowns */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem; /* optional spacing */
+}
+
+.section-header h4 {
+  margin: 0;
+}
+
+.section-header select {
+  padding: 0.2rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+/* Modal overlay */
+.loading-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal content */
+.loading-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 300px;
+}
+
+/* Spinner style */
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto 20px;
+}
+
+/* Keyframes for spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

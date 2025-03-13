@@ -1,0 +1,180 @@
+.results-page-container {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Navigation bar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 2px solid #4aa398;
+    padding: 0 70px;
+    height: 80px;
+  }
+  
+  .navbar-title h1 {
+    margin: 0;
+    color: #4aa398;
+    font-size: 1.8rem;
+  }
+  
+  .navbar-links button {
+    margin-left: 20px;
+    background-color: #4aa398;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .navbar-links button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Results header */
+  .results-header {
+    text-align: center;
+    margin: 40px 0;
+  }
+  
+  .results-header h2 {
+    margin-bottom: 10px;
+  }
+  
+  .download-btn {
+    background-color: #4aa398;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .download-btn:hover {
+    opacity: 0.8;
+  }
+  
+  /* Info section (SHAP, PDP, etc.) */
+  .info-section {
+    width: 90%;
+    margin: 30px auto;
+    background-color: #c7dfdb; /* Light teal background */
+    border: 2px solid #4aa398;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .info-section h3 {
+    color: #4aa398;
+    margin-top: 0;
+  }
+  
+  .feature-section {
+    margin-bottom: 40px;
+  }
+  
+  .feature-title {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: underline;
+  }
+  
+  /* Each class row (plot + interpretation) side by side */
+  .class-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  /* Plot container */
+  .plot-box {
+    width: 520px; /* slightly bigger than Plot layout width */
+    height: auto;
+    border: 2px solid #000;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    margin-right: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Interpretation container */
+  .interpretation-box {
+    flex: 1;
+    background-color: #e8f6f4;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* -----------------------------
+     Toggle Buttons for Local/Global
+     ----------------------------- */
+  .toggle-container {
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;
+    gap: 20px;                /* Spacing between the two buttons */
+    margin-bottom: 20px;      /* Some spacing below the buttons */
+  }
+  
+  .toggle-container button {
+    background-color: #4aa398; /* Same as the Nav/Logout buttons */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .toggle-container button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Highlight the active mode (Local/Global) */
+  .toggle-container button.active {
+    background-color: #367c68; 
+  }
+  
+  /* GLOBAL SHAP (similar to your History approach) */
+  .global-plot-container {
+    width: 860px; 
+    border: 2px solid #000;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 20px auto; /* Center horizontally with some vertical spacing */
+  }
+  
+  .global-plot-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .global-interpretation-box {
+    width: 100%;
+    background-color: #e8f6f4;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  

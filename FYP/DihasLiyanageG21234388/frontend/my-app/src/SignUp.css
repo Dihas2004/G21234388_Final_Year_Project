@@ -1,0 +1,99 @@
+/* The overall page container */
+.signup-page {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Teal heading box at the top */
+.header-bar {
+  background-color: #4aa398; /* Teal color */
+  padding: 20px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.header-bar h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Container for the sign-up box (below the header) */
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 60px); /* Subtract header height so the box is vertically centered */
+  background-color: #f5f5f5;
+}
+
+/* The teal sign-up box styling */
+.signup-box {
+  background-color: #4aa398;
+  padding: 70px;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signup-box h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+/* Error message styling (optional) */
+.error {
+  color: #ffe0e0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Input fields styling */
+.signup-box input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Sign Up button styling */
+.signup-box button {
+  width: 60%;        /* Make button narrower */
+  margin: 0 auto;    /* Center horizontally */
+  display: block;    /* Required for margin: auto to work */
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #4aa398;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup-box button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Paragraph and login link styling */
+.signup-box p {
+  margin-top: 30px;
+  text-align: center;
+  color: #fff;
+}
+
+.login-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #fff;
+}
+
+.login-link:hover {
+  opacity: 0.8;
+}
