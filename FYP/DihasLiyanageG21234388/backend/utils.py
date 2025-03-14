@@ -13,9 +13,12 @@ def get_pdp_data(model, X, feature, target_class, grid_resolution=50):
     x_max = np.percentile(X[feature], 95)
     x_vals = np.linspace(x_min, x_max, grid_resolution)
     pdp_vals = []
+    # Work on a copy to avoid modifying original data
     X_temp = X.copy()
     for val in x_vals:
+        # Replace feature with grid value
         X_temp[feature] = val
+        # Compute average probability
         prob = model.predict_proba(X_temp)[:, target_class].mean()
         pdp_vals.append(prob)
     return x_vals.tolist(), pdp_vals
@@ -30,6 +33,7 @@ def snap_coords_to_whole(x_vals, y_vals):
     for x, y in zip(x_vals, y_vals):
         rounded = round(x)
         diff = abs(x - rounded)
+        # Keep the pair with smallest difference for each rounded value
         if rounded not in snapped or diff < snapped[rounded][2]:
             snapped[rounded] = (x, y, diff)
     sorted_keys = sorted(snapped.keys())
@@ -48,6 +52,7 @@ def shap_feature_selection(model, X_train, top_n=8):
         vals = shap_values.values
         n_features = X_train.shape[1]
         if vals.ndim == 3:
+            # Handle multi-dimensional outputs for multi-class models
             if vals.shape[1] == n_features:
                 mean_shap_values = np.mean(np.abs(vals), axis=(0, 2))
             elif vals.shape[2] == n_features:
@@ -58,6 +63,7 @@ def shap_feature_selection(model, X_train, top_n=8):
         else:
             mean_shap_values = np.mean(np.abs(vals), axis=0)
         mean_shap_values = np.array(mean_shap_values).flatten()
+        # Check if computed SHAP values match the number of features
         if len(mean_shap_values) != n_features:
             print(f"SHAP dimension mismatch: {len(mean_shap_values)} vs {n_features}. Skipping SHAP selection.")
             return X_train.columns.tolist(), shap_values

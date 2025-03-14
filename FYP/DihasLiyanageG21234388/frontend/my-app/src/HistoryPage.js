@@ -8,6 +8,9 @@ import userGuideSHAP from "./UserGuideSHAP.png";
 import userGuidePDP from "./UserGuidePDP.png";
 
 // ------------------ Interpretation Helpers (Local) ------------------
+
+// Processes SHAP data for a given feature and returns interpretation lines based on a threshold.
+// Groups SHAP values by x-value and then determines if the positive or negative SHAPs dominate.
 function interpretShapForFeature(featureData, threshold = 0.7) {
   if (!featureData || !featureData.x || !featureData.y) return [];
   const mapXToShapValues = {};
@@ -20,12 +23,14 @@ function interpretShapForFeature(featureData, threshold = 0.7) {
     mapXToShapValues[xVal].push(yVal);
   }
   const interpretationLines = [];
+  // Loop over grouped x-values and calculate ratios for positive and negative SHAP values.
   for (const [xVal, shapVals] of Object.entries(mapXToShapValues)) {
     const totalCount = shapVals.length;
     const positiveCount = shapVals.filter((val) => val > 0).length;
     const negRatio = shapVals.filter((val) => val < 0).length / totalCount;
     const posRatio = positiveCount / totalCount;
     let line = `• For ${featureData.feature} = ${xVal}: (${positiveCount} / ${totalCount} positive SHAP) → `;
+    // Check if SHAP signs strongly indicate model leaning.
     if (posRatio >= threshold) {
       line += "The model strongly leans toward the predicted variable's class.";
     } else if (negRatio >= threshold) {
@@ -38,6 +43,8 @@ function interpretShapForFeature(featureData, threshold = 0.7) {
   return interpretationLines;
 }
 
+// Analyzes PDP data segments to interpret how predictions change as a feature varies.
+// It sorts the data pairs and then computes the change (delta) between successive points.
 function interpretPdpSegments(featureData) {
   if (!featureData || !featureData.x || !featureData.y || featureData.x.length < 2) {
     return ["Insufficient data for PDP interpretation."];
@@ -50,6 +57,7 @@ function interpretPdpSegments(featureData) {
     const [x2, y2] = xyPairs[i + 1];
     const delta = y2 - y1;
     let direction;
+    // Determine the direction of change between points.
     if (Math.abs(delta) < 1e-5) {
       direction = `remains roughly the same (${y1.toFixed(3)} to ${y2.toFixed(3)})`;
     } else if (delta > 0) {
@@ -65,6 +73,9 @@ function interpretPdpSegments(featureData) {
 }
 
 // ------------------ NEW Global Interpretation (All X-values) ------------------
+
+// Processes global SHAP data for a feature by grouping all x-values and interpreting if they strongly indicate a prediction.
+// Uses a threshold to filter out features with strong leaning toward a class.
 function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
   if (!featureData || !featureData.x || !featureData.y) return [];
   const groups = {};
@@ -79,6 +90,7 @@ function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
     const total = vals.length;
     const posCount = vals.filter((v) => v > 0).length;
     const posRatio = posCount / total;
+    // If positive SHAP ratio is above threshold, add an interpretation line.
     if (posRatio >= threshold) {
       lines.push(
         `• Feature "${featureData.feature}" at Class=${xVal}: strongly toward the predicted variable's class (positive SHAP: ${(posRatio * 100).toFixed(1)}%).`
@@ -88,6 +100,8 @@ function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
   return lines;
 }
 
+// Renders global SHAP plots for all x-values using Plotly, including an interpretation section for each class.
+// Iterates over each plot class and constructs traces with unique colors.
 function renderGlobalShapPlotsAllX(shap_plots, threshold = 0.7) {
   const colorPalette = [
     "#1f77b4",
@@ -116,6 +130,7 @@ function renderGlobalShapPlotsAllX(shap_plots, threshold = 0.7) {
     }));
 
     let globalInterpretations = [];
+    // Concatenate interpretations for each feature in the class.
     plotClass.data.forEach((featureData) => {
       const lines = interpretGlobalShapForFeatureAllX(featureData, threshold);
       globalInterpretations = globalInterpretations.concat(lines);
@@ -155,6 +170,8 @@ function renderGlobalShapPlotsAllX(shap_plots, threshold = 0.7) {
 }
 
 // ------------------ Loading Modal Component ------------------
+
+// Simple modal component to show a loading spinner and message while history data is being fetched.
 function LoadingModal() {
   return (
     <div className="loading-modal">
@@ -166,6 +183,8 @@ function LoadingModal() {
   );
 }
 
+
+// Main component for displaying the history page, which includes training history records, interpretability plots, and user guide sections.
 function HistoryPage() {
   const [trainingHistory, setTrainingHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
@@ -173,6 +192,7 @@ function HistoryPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Listen for changes in authentication state and load training history if the user is authenticated.
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
@@ -197,7 +217,7 @@ function HistoryPage() {
     });
     return () => unsubscribe();
   }, []);
-
+  // Toggle between local and global interpretability modes.
   const handleToggle = (mode) => {
     setInterpretabilityMode(mode);
   };
@@ -215,7 +235,7 @@ function HistoryPage() {
       {loadingHistory && <LoadingModal />}
       <header className="navbar">
         <div className="navbar-title">
-          <h1>My ML App</h1>
+          <h1>Bitcoin Prediction Interpreter</h1>
         </div>
         <nav className="navbar-links">
           <a href="#home" onClick={() => navigate("/home")}>Home</a>

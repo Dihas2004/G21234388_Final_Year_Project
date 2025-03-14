@@ -28,7 +28,7 @@ function SignUp() {
   return (
     <div className="signup-page">
       <div className="header-bar">
-        <h1>My ML App</h1>
+        <h1>Bitcoin Prediction Interpreter</h1>
       </div>
       <div className="signup-container">
         <div className="signup-box">

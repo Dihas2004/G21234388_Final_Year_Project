@@ -11,9 +11,17 @@ function App() {
     <Routes>
       {/* When the app starts, go to login */}
       <Route path="/" element={<Login />} />
+
+      {/* Route for the signup page */}
       <Route path="/signup" element={<SignUp />} />
+
+      {/* Route for the homepage */}
       <Route path="/home" element={<HomePage />} />
+
+      {/* Route for the history page */}
       <Route path="/history" element={<HistoryPage />} />
+
+      {/* Route for the results page */}
       <Route path="/results" element={<ResultsPage />} />
 
       {/* Redirect any unknown route to login */}

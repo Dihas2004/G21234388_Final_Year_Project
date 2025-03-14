@@ -5,10 +5,12 @@ import "./Result.css";
 
 /** 
  * -- Utility: interpretShapForFeature (Local) --
+ * Groups SHAP values by x-value and then determines if the model strongly leans toward or against the predicted class.
  */
 function interpretShapForFeature(featureData, threshold = 0.7) {
   if (!featureData || !featureData.x || !featureData.y) return [];
   const mapXToShapValues = {};
+  // Group SHAP values by each x-value
   for (let i = 0; i < featureData.x.length; i++) {
     const xVal = featureData.x[i];
     const yVal = featureData.y[i];
@@ -18,6 +20,7 @@ function interpretShapForFeature(featureData, threshold = 0.7) {
     mapXToShapValues[xVal].push(yVal);
   }
   const interpretationLines = [];
+  // For each x value group, compute ratios and create interpretation line based on threshold
   for (const [xVal, shapVals] of Object.entries(mapXToShapValues)) {
     const totalCount = shapVals.length;
     const positiveCount = shapVals.filter((val) => val > 0).length;
@@ -38,14 +41,18 @@ function interpretShapForFeature(featureData, threshold = 0.7) {
 
 /** 
  * -- Utility: interpretPdpSegments (Local) --
+ *  Analyzes how the model's average prediction changes as the feature value changes.
+ * Sorts data pairs and computes the difference between successive points.
  */
 function interpretPdpSegments(featureData) {
   if (!featureData || !featureData.x || !featureData.y || featureData.x.length < 2) {
     return ["Insufficient data for PDP interpretation."];
   }
   const xyPairs = featureData.x.map((val, idx) => [val, featureData.y[idx]]);
+  // Sort the pairs based on the x value
   xyPairs.sort((a, b) => a[0] - b[0]);
   const lines = [];
+  // Compute the delta between consecutive points to determine the trend
   for (let i = 0; i < xyPairs.length - 1; i++) {
     const [x1, y1] = xyPairs[i];
     const [x2, y2] = xyPairs[i + 1];
@@ -67,16 +74,19 @@ function interpretPdpSegments(featureData) {
 
 /** 
  * -- Global SHAP Interpretation --
+ *  Groups all SHAP values by x and determines if the positive ratio meets the threshold.
  */
 function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
   if (!featureData || !featureData.x || !featureData.y) return [];
   const groups = {};
+  // Group SHAP values by each x value
   for (let i = 0; i < featureData.x.length; i++) {
     const xVal = featureData.x[i];
     if (!groups[xVal]) groups[xVal] = [];
     groups[xVal].push(featureData.y[i]);
   }
   const lines = [];
+  // For each group, if the positive ratio exceeds the threshold, create an interpretation line
   for (const xVal in groups) {
     const vals = groups[xVal];
     const total = vals.length;
@@ -93,6 +103,7 @@ function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
 
 /** 
  * -- Render Global SHAP Plots --
+ *  Iterates over each class in the global SHAP plots and renders a plot with corresponding interpretations.
  */
 function renderGlobalShapPlots(shap_plots, threshold = 0.7) {
   const colorPalette = [
@@ -102,6 +113,7 @@ function renderGlobalShapPlots(shap_plots, threshold = 0.7) {
   ];
 
   return shap_plots.plots.map((plotClass, classIdx) => {
+    // Create plot traces for each feature in the class with a unique color
     const traces = plotClass.data.map((featureData, i) => ({
       x: featureData.x,
       y: featureData.y,
@@ -115,6 +127,7 @@ function renderGlobalShapPlots(shap_plots, threshold = 0.7) {
     }));
 
     let globalInterpretations = [];
+    // Aggregate interpretations from all features in the class
     plotClass.data.forEach((featureData) => {
       const lines = interpretGlobalShapForFeatureAllX(featureData, threshold);
       globalInterpretations = globalInterpretations.concat(lines);
@@ -160,10 +173,10 @@ function ResultsPage() {
   // Toggle: local vs global
   const [interpretabilityMode, setInterpretabilityMode] = useState("local");
 
-  // Data from location.state
+  // Retrieve training results and model data from location state
   const { trainingResult, modelPklB64, modelFileName } = location.state || {};
 
-  // If data missing, fallback
+  // Fallback if no training data found
   if (!trainingResult) {
     return (
       <div style={{ padding: "20px", textAlign: "center" }}>
@@ -173,11 +186,11 @@ function ResultsPage() {
     );
   }
 
-  // Destructure
+  // Destructure SHAP and PDP plots along with accuracy
   const { shap_plots, pdp_plots, accuracy } = trainingResult;
   const targetVar = shap_plots?.target_variable || "Unknown Target";
 
-  // Gather features
+  // Extract feature names for SHAP and PDP (Local mode only)
   const shapFeatures =
     shap_plots?.plots?.length > 0
       ? shap_plots.plots[0].data.map((item) => item.feature)
@@ -188,7 +201,7 @@ function ResultsPage() {
       ? pdp_plots.plots[0].data.map((item) => item.feature)
       : [];
 
-  // Download model
+  /// Convert base64 string to Blob for model download
   const b64toBlob = (b64Data, contentType = "application/octet-stream", sliceSize = 512) => {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
@@ -204,6 +217,7 @@ function ResultsPage() {
     return new Blob(byteArrays, { type: contentType });
   };
 
+  // Function to trigger model download
   const downloadModel = () => {
     if (!modelPklB64) return;
     const blob = b64toBlob(modelPklB64, "application/octet-stream");
@@ -222,7 +236,7 @@ function ResultsPage() {
     setInterpretabilityMode(mode);
   };
 
-  // Instead of setting window.location.hash, we directly scroll:
+  // Scrolls smoothly to a given feature section by its ID
   const scrollToFeature = (featureId) => {
     const el = document.getElementById(featureId);
     if (el) {
@@ -234,7 +248,7 @@ function ResultsPage() {
     <div className="results-page-container">
       <header className="navbar">
         <div className="navbar-title">
-          <h1>My ML App</h1>
+          <h1>Bitcoin Prediction Interpreter</h1>
         </div>
         <nav className="navbar-links">
           <button onClick={() => navigate("/home")}>Home</button>
@@ -279,7 +293,7 @@ function ResultsPage() {
                   onChange={(e) => {
                     const selectedFeature = e.target.value;
                     if (selectedFeature) {
-                      // Instead of setting window.location.hash, we do scroll:
+                      // Scroll to selected SHAP feature section
                       scrollToFeature(`result-shap-feature-${selectedFeature}`);
                     }
                   }}
@@ -296,8 +310,10 @@ function ResultsPage() {
           </div>
 
           {interpretabilityMode === "global" ? (
+            // Render global SHAP plots if in Global mode
             renderGlobalShapPlots(shap_plots, 0.7)
           ) : (
+            // Otherwise, render local SHAP plots for each feature
             shapFeatures.map((feature) => (
               <div
                 key={feature}
@@ -368,7 +384,7 @@ function ResultsPage() {
                     onChange={(e) => {
                       const selectedFeature = e.target.value;
                       if (selectedFeature) {
-                        // Again, direct scroll:
+                        // Scroll to selected PDP feature section
                         scrollToFeature(`result-pdp-feature-${selectedFeature}`);
                       }
                     }}
