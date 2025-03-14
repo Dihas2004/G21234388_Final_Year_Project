@@ -66,7 +66,7 @@ function interpretPdpSegments(featureData) {
       direction = `decreases from ${y1.toFixed(3)} to ${y2.toFixed(3)}`;
     }
     lines.push(
-      `• As ${featureData.feature} goes from ${x1} to ${x2}, the model's average prediction ${direction}.`
+      `• As ${featureData.feature} goes from ${x1} to ${x2}, the model prediction for the target variable's class ${direction}.`
     );
   }
   return lines;
@@ -94,7 +94,7 @@ function interpretGlobalShapForFeatureAllX(featureData, threshold = 0.7) {
     const posRatio = posCount / total;
     if (posRatio >= threshold) {
       lines.push(
-        `• Feature "${featureData.feature}" at x=${xVal}: strongly TOWARD (positive SHAP: ${(posRatio * 100).toFixed(1)}%).`
+        `• Feature "${featureData.feature}" at x=${xVal}: strongly toward the predicted variable's class (positive SHAP: ${(posRatio * 100).toFixed(1)}%).`
       );
     }
   }
