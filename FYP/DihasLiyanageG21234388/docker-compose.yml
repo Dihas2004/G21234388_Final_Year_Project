@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    # If your Flask code needs environment variables, add them here:
+    # environment:
+    #   - SOME_KEY=some_value
+    #   - ...
+  
+  frontend:
+    build: ./frontend/my-app
+    container_name: react-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    # If your React app calls Flask at localhost:5000, 
+    # you might need to adjust the proxy or .env settings for production.
